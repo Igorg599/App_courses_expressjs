@@ -17,7 +17,8 @@ app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 app.set('views', 'views')
 
-app.use(express.static('public'))
+app.use(express.static('public')) // по умолчанию папка public для подгрузки разных файлов
+app.use(express.urlencoded({extended: true})) // для корректной обработки загружаемых данных (форма)
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)
