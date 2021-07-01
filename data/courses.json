@@ -2,11 +2,7 @@
   {
     "title": "Best",
     "price": "1000",
-    "id": "7aae5a14-1c7f-4b5d-be8c-bbe2f3636988"
-  },
-  {
-    "title": "Best",
-    "price": "1200",
-    "id": "3edb6752-bea8-4fa7-9f36-86ff2db588b5"
+    "img": "https://avatarko.ru/img/kartinka/1/Crazy_Frog.jpg",
+    "id": "ee7d5c07-cdd8-42b3-a4d5-47f1cd88ff1e"
   }
 ]
