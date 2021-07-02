@@ -4,7 +4,7 @@ const exphbs = require('express-handlebars');
 const homeRoutes = require('./routes/home');
 const addRoutes = require('./routes/add');
 const coursesRoutes = require('./routes/courses');
-const cardRoutes = require('./routes/add');
+const cardRoutes = require('./routes/card');
 
 const app = express();
 
