@@ -1,8 +1,8 @@
-const { v4: uuidv4 } = require('uuid');
-const fs = require('fs')
-const path = require('path');
-const { resolve } = require('path');
-const { rejects } = require('assert');
+const { v4: uuidv4 } = require("uuid")
+const fs = require("fs")
+const path = require("path")
+const { resolve } = require("path")
+const { rejects } = require("assert")
 
 class Course {
   constructor(title, price, img) {
@@ -17,17 +17,17 @@ class Course {
       title: this.title,
       price: this.price,
       img: this.img,
-      id: this.id
+      id: this.id,
     }
   }
 
   async save() {
-    const courses = await Course.getAll();
+    const courses = await Course.getAll()
     courses.push(this.toJSON())
 
     return new Promise((resolve, reject) => {
       fs.writeFile(
-        path.join(__dirname, '..', 'data', 'courses.json'),
+        path.join(__dirname, "..", "data", "courses.json"),
         JSON.stringify(courses),
         (err) => {
           if (err) {
@@ -43,8 +43,8 @@ class Course {
   static getAll() {
     return new Promise((resolve, reject) => {
       fs.readFile(
-        path.join(__dirname, '..', '/data', 'courses.json'),
-        'utf-8',
+        path.join(__dirname, "..", "/data", "courses.json"),
+        "utf-8",
         (err, content) => {
           if (err) {
             reject(err)
@@ -54,6 +54,11 @@ class Course {
         }
       )
     })
+  }
+
+  static async getById(id) {
+    const courses = await Course.getAll()
+    return courses.find((c) => c.id === id)
   }
 }
 
