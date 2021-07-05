@@ -1,42 +1,50 @@
-const express = require('express');
-const path = require('path');
-const exphbs = require('express-handlebars');
-const homeRoutes = require('./routes/home');
-const addRoutes = require('./routes/add');
-const coursesRoutes = require('./routes/courses');
-const cardRoutes = require('./routes/card');
+const express = require("express")
+const path = require("path")
+const mongoose = require('mongoose')
+const exphbs = require("express-handlebars")
+const homeRoutes = require("./routes/home")
+const addRoutes = require("./routes/add")
+const coursesRoutes = require("./routes/courses")
+const cardRoutes = require("./routes/card")
 
-const app = express();
-
+const app = express()
 
 const hbs = exphbs.create({
-  defaultLayout: 'main',
-  extname: 'hbs'
-});
+  defaultLayout: "main",
+  extname: "hbs",
+})
 
-app.engine('hbs', hbs.engine)
-app.set('view engine', 'hbs')
-app.set('views', 'views')
+app.engine("hbs", hbs.engine)
+app.set("view engine", "hbs")
+app.set("views", "views")
 
-app.use(express.static(path.join(__dirname, 'public'))) // по умолчанию папка public для подгрузки разных файлов
-app.use(express.urlencoded({extended: true})) // для корректной обработки загружаемых данных (форма)
+app.use(express.static(path.join(__dirname, "public"))) // по умолчанию папка public для подгрузки разных файлов
+app.use(express.urlencoded({ extended: true })) // для корректной обработки загружаемых данных (форма)
 
-app.use('/', homeRoutes)
-app.use('/add', addRoutes)
-app.use('/courses', coursesRoutes)
-app.use('/card', cardRoutes)
+app.use("/", homeRoutes)
+app.use("/add", addRoutes)
+app.use("/courses", coursesRoutes)
+app.use("/card", cardRoutes)
 
 const PORT = process.env.PORT || 4001
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
-})
 
+async function start() {
+  try {
+    const url =
+    "mongodb+srv://igorg599:<Dbhecyzr59>@cluster0.vrd8v.mongodb.net/shop"
 
+    await mongoose.connect(url, {useNewUrlParser: true})
 
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`)
+    })
+  } catch(e) {
+    console.log(e)
+  }
+}
 
-
-
+start()
 
 // app.get('/', (req, res) => {
 //   // res.status(200)
