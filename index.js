@@ -16,6 +16,7 @@ const ordersRoutes = require('./routes/orders')
 const authRoutes = require('./routes/auth')
 // const User = require('./models/user')
 const varMiddleware = require('./middleware/variables')
+const userMidlleware = require('./middleware/user')
 
 const MONGODB_URI = "mongodb+srv://igorg599:Dbhecyzr59@cluster0.vrd8v.mongodb.net/shop"
 const app = express()
@@ -54,6 +55,7 @@ app.use(session({
   store
 }))
 app.use(varMiddleware)
+app.use(userMidlleware)
 
 app.use("/", homeRoutes)
 app.use("/add", addRoutes)
