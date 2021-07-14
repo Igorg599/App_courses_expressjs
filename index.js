@@ -6,6 +6,7 @@ const exphbs = require("express-handlebars")
 const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access")
+const session = require('express-session')
 const homeRoutes = require("./routes/home")
 const addRoutes = require("./routes/add")
 const coursesRoutes = require("./routes/courses")
@@ -13,6 +14,7 @@ const cardRoutes = require("./routes/card")
 const ordersRoutes = require('./routes/orders')
 const authRoutes = require('./routes/auth')
 const User = require('./models/user')
+const varMiddleware = require('./middleware/variables')
 
 const app = express()
 
@@ -38,6 +40,12 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public"))) // по умолчанию папка public для подгрузки разных файлов
 app.use(express.urlencoded({ extended: true })) // для корректной обработки загружаемых данных (форма)
+app.use(session({
+  secret: 'some secret value',
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(varMiddleware)
 
 app.use("/", homeRoutes)
 app.use("/add", addRoutes)
