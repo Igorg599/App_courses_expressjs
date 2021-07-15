@@ -35,3 +35,12 @@
 .course-form {
   margin-bottom: 2rem;
 }
+
+.alert {
+  padding: .5rem 1rem;
+  border-radius: 19px;
+  text-align: center;
+  margin-bottom: 1rem;
+  background-color: rgba(255, 0, 0, .3);
+  color: red;
+}
