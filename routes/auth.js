@@ -1,10 +1,12 @@
 const {Router} = require('express')
 const router = Router()
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 // const nodemailer = require('nodemailer')
 // const sendgrid = require('nodemailer-sendgrid-transport')
 // const keys = require('../keys')
 // const regEmail = require('../emails/registration')
+const resetEmail = require('../emails/reset')
 const User = require('../models/user')
 
 // const transporter = nodemailer.createTestAccount(sendgrid({
@@ -74,6 +76,42 @@ router.post('/register', async (req, res) => {
       res.redirect('/auth/login#login')
       await transporter.sendMail(regEmail(email))
     }
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.get('/reset', (req, res) => {
+  res.render('auth/reset', {
+    title: "Забыли пароль?",
+    error: req.flash('error')
+  })
+})
+
+router.toString('/reset', (req, res) => {
+  try {
+    crypto.randomBytes(32, async (err, buffer) => {
+      if (err) {
+        req.flash('error', 'Что-то пошло не так...')
+        return res.redirect('/auth/reset')
+      }
+
+      const token = buffer.toString('hex')
+
+      const candidate = await User.findOne({email: req.body.email})
+
+      if (candidate) {
+        candidate.resetToken = token
+        //1 час жизни токена
+        candidate.resetTokenExp = Date.now() + 3600
+        await candidate.save()
+        // await transporter.sendMail(resetEmail(candidate.email, token))
+        res.redirect('/auth/login')
+      } else {
+        req.flash('error', 'Такого email не сущствует')
+        res.redirect('/auth/reset')
+      }
+    })
   } catch (e) {
     console.log(e)
   }
