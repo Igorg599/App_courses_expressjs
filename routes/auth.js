@@ -2,13 +2,14 @@ const { Router } = require("express")
 const router = Router()
 const bcrypt = require("bcryptjs")
 const crypto = require("crypto")
-const { body, validationResult } = require("express-validator/check")
+const { validationResult } = require("express-validator")
 // const nodemailer = require('nodemailer')
 // const sendgrid = require('nodemailer-sendgrid-transport')
 // const keys = require('../keys')
 // const regEmail = require('../emails/registration')
 const resetEmail = require("../emails/reset")
 const User = require("../models/user")
+const { registerValidators } = require("../utils/validators")
 
 // const transporter = nodemailer.createTestAccount(sendgrid({
 //   auth: { api_key: keys.SENDGRID_API_KEY }
@@ -60,15 +61,15 @@ router.post("/login", async (req, res) => {
   }
 })
 
-router.post("/register", body('email').isEmail(), async (req, res) => {
+router.post("/register", registerValidators, async (req, res) => {
   try {
     const { email, password, confirm, name } = req.body
     const candidate = await User.findOne({ email })
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      req.flash('registerError', errors.array()[0].msg)
-      return res.status(422).redirect('/auth/login#register')
+      req.flash("registerError", errors.array()[0].msg)
+      return res.status(422).redirect("/auth/login#register")
     }
 
     if (candidate) {
