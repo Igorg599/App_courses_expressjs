@@ -34,6 +34,27 @@ exports.registerValidators = [
     .trim(),
 ]
 
+exports.loginValidators = [
+  body("email")
+    .isEmail()
+    .withMessage("Введите корректный email")
+    .custom(async (value, { req }) => {
+      try {
+        const user = await User.findOne({ email: value })
+        if (!user) {
+          return Promise.reject("Такого пользователя не существует")
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    })
+    .normalizeEmail(),
+  body("password", "Пароль должен быть минимум 6 символов")
+    .isLength({ min: 6, max: 56 })
+    .isAlphanumeric()
+    .trim(),
+]
+
 exports.courseValidators = [
   body("title")
     .isLength({ min: 3 })

@@ -9,7 +9,7 @@ const { validationResult } = require("express-validator")
 // const regEmail = require('../emails/registration')
 const resetEmail = require("../emails/reset")
 const User = require("../models/user")
-const { registerValidators } = require("../utils/validators")
+const { registerValidators, loginValidators } = require("../utils/validators")
 
 // const transporter = nodemailer.createTestAccount(sendgrid({
 //   auth: { api_key: keys.SENDGRID_API_KEY }
@@ -30,30 +30,51 @@ router.get("/logout", async (req, res) => {
   })
 })
 
-router.post("/login", async (req, res) => {
+router.post("/login", loginValidators, async (req, res) => {
   try {
     const { email, password } = req.body
 
     const candidate = await User.findOne({ email })
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      req.flash("loginError", errors.array()[0].msg)
+      return res.status(422).redirect("/auth/login#login")
+    }
 
-    if (candidate) {
-      const areSame = await bcrypt.compare(password, candidate.password)
-      if (areSame) {
-        const user = candidate
-        req.session.user = user
-        req.session.isAuthenticated = true
-        req.session.save((err) => {
-          if (err) {
-            throw err
-          }
-          res.redirect("/")
-        })
-      } else {
-        req.flash("loginError", "Неверный пароль")
-        res.redirect("/auth/login#login")
-      }
+    // if (candidate) {
+    //   const areSame = await bcrypt.compare(password, candidate.password)
+    //   if (areSame) {
+    //     const user = candidate
+    //     req.session.user = user
+    //     req.session.isAuthenticated = true
+    //     req.session.save((err) => {
+    //       if (err) {
+    //         throw err
+    //       }
+    //       res.redirect("/")
+    //     })
+    //   } else {
+    //     req.flash("loginError", "Неверный пароль")
+    //     res.redirect("/auth/login#login")
+    //   }
+    // } else {
+    //   req.flash("loginError", "Такого пользователя не существует")
+    //   res.redirect("/auth/login#login")
+    // }
+
+    const areSame = await bcrypt.compare(password, candidate.password)
+    if (areSame) {
+      const user = candidate
+      req.session.user = user
+      req.session.isAuthenticated = true
+      req.session.save((err) => {
+        if (err) {
+          throw err
+        }
+        res.redirect("/")
+      })
     } else {
-      req.flash("loginError", "Такого пользователя не существует")
+      req.flash("loginError", "Неверный пароль")
       res.redirect("/auth/login#login")
     }
   } catch (e) {
