@@ -20,6 +20,7 @@ const authRoutes = require('./routes/auth')
 const varMiddleware = require('./middleware/variables')
 const userMidlleware = require('./middleware/user')
 const errorHandler = require('./middleware/error')
+const profileRoutes = require('./routes/profile')
 const keys = require('./keys')
 
 const app = express()
@@ -69,6 +70,7 @@ app.use("/courses", coursesRoutes)
 app.use("/card", cardRoutes)
 app.use("/orders", ordersRoutes)
 app.use('/auth', authRoutes)
+app.use('/profile', profileRoutes)
 
 app.use(errorHandler)
 

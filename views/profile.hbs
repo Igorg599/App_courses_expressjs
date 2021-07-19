@@ -1,0 +1,39 @@
+<h1>Profile</h1>
+
+<div class="row">
+  <div class="col s6">
+    <img
+      class="avatar"
+      src="https://www.freeiconspng.com/uploads/penguin-linux-icon-22.png"
+      alt="img"
+    />
+
+    <p>Аватара нет</p>
+  </div>
+
+  <div class="col s6">
+    <form action="/profile" method="POST">
+      <p>Ваш email: <strong>{{user.email}}</strong></p>
+
+      <div class="input-field">
+        <input id="name" name="name" type="text" class="validate" required value="{{user.title}}">
+        <label for="name">Your name</label>
+        <span class="helper-text" data-error="Введите имя"></span>
+      </div>
+
+      <div class="file-field input-field">
+        <div class="btn">
+          <span>Аватар</span>
+          <input type="file" name="avatar">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf" value="{{csrf}}">
+
+      <button type="submit" class="btn">Edit</button>
+    </form>
+  </div>
+</div>
