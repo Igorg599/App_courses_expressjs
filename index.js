@@ -53,6 +53,7 @@ app.set("views", "views")
 // })
 
 app.use(express.static(path.join(__dirname, "public"))) // по умолчанию папка public для подгрузки разных файлов
+app.use('/images', express.static(path.join(__dirname, "images"))) 
 app.use(express.urlencoded({ extended: true })) // для корректной обработки загружаемых данных (форма)
 app.use(session({
   secret: keys.SESSION_SECRET,
